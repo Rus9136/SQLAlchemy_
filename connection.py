@@ -9,6 +9,7 @@ import models
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import insert
 from sqlalchemy.orm import Session, sessionmaker
+
 #aclchemyorder
 
 def create_database():
@@ -134,6 +135,7 @@ def core_add_posts():
     #
     # print(r.fetchall())
 
+#####   ORM  #######
 
 def orm_schemas():
 
@@ -177,8 +179,28 @@ def orm_schemas():
 
     Base.metadata.create_all(engine)
 
+
+
 engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder')
-
 session = sessionmaker(bind=engine)
+session = session()
+
+c1 = models.Customer(
+    first_name = 'Dmitriy123',
+    last_name = 'Yatsenko123',
+    username = 'Moseend123',
+    email = 'moseend@mail.com'
+)
+
+c2 = models.Customer(
+    first_name = 'Valeriy123',
+    last_name = 'Golyshkin123',
+    username = 'Fortioneaks123',
+    email = 'fortioneaks@gmail.com'
+)
 
 
+
+session.add(c1)
+session.add(c2)
+session.commit()
