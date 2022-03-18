@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session, sessionmaker
 def create_database():
     # Устанвливаем соединение с postgres
     connection = psycopg2.connect(user="postgres", password="123")
-    print(connection)
+
     connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
     # Создаем курсор для выполнения операций с базой данных
@@ -23,7 +23,7 @@ def create_database():
 
     # Создаем базу данных
     sql_create_database = cursor.execute('CREATE DATABASE aclchemyorder')
-    print(sql_create_database)
+
     cursor.close()
     connection.close()
 
@@ -180,27 +180,16 @@ def orm_schemas():
     Base.metadata.create_all(engine)
 
 
-
 engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder')
 session = sessionmaker(bind=engine)
-session = session()
+sessionLocal = session()
 
 c1 = models.Customer(
-    first_name = 'Dmitriy123',
-    last_name = 'Yatsenko123',
-    username = 'Moseend123',
-    email = 'moseend@mail.com'
+    first_name='Rus',
+    last_name='daurenov',
+    username='RusTD',
+    email='3350698@mail.com'
 )
 
-c2 = models.Customer(
-    first_name = 'Valeriy123',
-    last_name = 'Golyshkin123',
-    username = 'Fortioneaks123',
-    email = 'fortioneaks@gmail.com'
-)
-
-
-
-session.add(c1)
-session.add(c2)
-session.commit()
+sessionLocal.add(c1)
+sessionLocal.commit()
