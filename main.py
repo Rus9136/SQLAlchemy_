@@ -27,6 +27,7 @@ async def root():
 @app.post('/items', response_model=Item,
           status_code=status.HTTP_201_CREATED)
 def create_an_item(item: Item):
+
     db_item = db.query(models.Operation).filter(models.Operation.id == item.id).first()
 
     if db_item is not None:
