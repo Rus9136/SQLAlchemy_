@@ -14,24 +14,24 @@ from sqlalchemy.orm import Session, sessionmaker
 
 def create_database():
     # Устанвливаем соединение с postgres
-    connection = psycopg2.connect(user="postgres", password="123")
-    print(connection)
+    connection = psycopg2.connect(user="postgres", password="1")
+
     connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
     # Создаем курсор для выполнения операций с базой данных
     cursor = connection.cursor()
 
     # Создаем базу данных
-    sql_create_database = cursor.execute('CREATE DATABASE aclchemyorder')
-    print(sql_create_database)
+    sql_create_database = cursor.execute('CREATE DATABASE database')
+
     cursor.close()
     connection.close()
 
-def connections(name_database):
+def connections(name_database='database'):
 
     # Соединение с Sqlite3
     # engine = sqlalchemy.create_engine('sqlite:///test.db')
-    #engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder')
+    #engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder') #database
     engine = create_engine('postgresql://postgres:123@localhost/'+name_database)
     engine.connect()
     return engine
@@ -141,7 +141,7 @@ def orm_schemas():
 
     Base = declarative_base()
 
-    engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder')
+    engine = create_engine('postgresql://postgres:1@localhost/database')
 
     class Customer(Base):
         __tablename__ = 'customers'
@@ -179,28 +179,19 @@ def orm_schemas():
 
     Base.metadata.create_all(engine)
 
+def orm_add_posts():
+
+    engine = create_engine('postgresql://postgres:1@localhost/database')
+    session = sessionmaker(bind=engine)
+    session = session()
+
+    c1 = models.Operation(
+        email='3350698@mail.ru',
+        username='Rus',
+        password_hash='123'
+    )
+
+    session.add(c1)
+    session.commit()
 
 
-engine = create_engine('postgresql://postgres:123@localhost/aclchemyorder')
-session = sessionmaker(bind=engine)
-session = session()
-
-c1 = models.Customer(
-    first_name = 'Dmitriy123',
-    last_name = 'Yatsenko123',
-    username = 'Moseend123',
-    email = 'moseend@mail.com'
-)
-
-c2 = models.Customer(
-    first_name = 'Valeriy123',
-    last_name = 'Golyshkin123',
-    username = 'Fortioneaks123',
-    email = 'fortioneaks@gmail.com'
-)
-
-
-
-session.add(c1)
-session.add(c2)
-session.commit()

@@ -1,22 +1,34 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from sqlalchemy import MetaData, Table, String, Integer, Column, Text, DateTime, Boolean, CheckConstraint, Numeric
-from datetime import datetime
+from sqlalchemy import MetaData, insert, Table, String, CheckConstraint, SmallInteger, Numeric, Integer, Column, Text, DateTime, Boolean, ForeignKey,Date
+from datetime import datetime, date
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
+
+from database import Base
+
 metadata = MetaData()
-Base = declarative_base()
 
 
-class Customer(Base):
-    __tablename__ = 'customers'
-    id = Column(Integer(), primary_key=True)
-    first_name = Column(String(100), nullable=False)
-    last_name = Column(String(100), nullable=False)
-    username = Column(String(50), nullable=False)
-    email = Column(String(200), nullable=False)
-    created_on = Column(DateTime(), default=datetime.now)
-    updated_on = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
+class User(Base):
+    __tablename__ = 'users'
 
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True)
+    username = Column(String, unique=True)
+    password_hash = Column(String)
+
+
+class Operation(Base):
+    __tablename__ = 'operations'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), index=True)
+    date = Column(Date)
+    category = Column(String)
+    amount = Column(Numeric(10, 2))
+    description = Column(String, nullable=True)
+    user = relationship('User', backref='operations')
 
 
